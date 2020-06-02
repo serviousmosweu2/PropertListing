@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessObjects.Properties;
 using DatabaseObjects;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,6 +38,9 @@ namespace api
                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
                 });
             });
+            //This is defined just for one. The rest will work 
+            //because they will be using the same Library
+            services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddMvc();//.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);  
             
         }

@@ -26,6 +26,7 @@ namespace api
                 try{
                     var context = services.GetRequiredService<DataContext>();
                     context.Database.Migrate();
+                    seed.SeedData(context);
                 }
                 catch(Exception ex)
                 {

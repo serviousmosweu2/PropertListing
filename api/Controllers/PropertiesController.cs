@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BusinessObjects.Properties;
 using DatabaseObjects;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,27 +13,28 @@ namespace api.Controllers
     [Route("api/[controller]")]
     public class PropertiesController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IMediator _mediator;
 
-        public PropertiesController(DataContext context)
+        public PropertiesController(IMediator mediator)
         {
-            _context = context;
-
+            _mediator = mediator;
         }
 
         //Get
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Property>>> Get()
+        public async Task<ActionResult<List<Property>>> List()
         {
-            var properties = await _context.Properties.ToListAsync();
-            return Ok(properties);
+           return  await _mediator.Send(new List.Query());
+            
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Property>> GetAction(int id)
+        [HttpGet("{propertyId}")]
+        public async Task<ActionResult<Property>> Details(int propertyId)
         {
-            var property = await _context.Properties.FindAsync(id);
-            return Ok(property);
+            return await _mediator.Send(
+                new Details.Query{PropertyId = propertyId});
         }
+
+       
     }
 }

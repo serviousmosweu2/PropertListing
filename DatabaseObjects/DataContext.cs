@@ -15,12 +15,12 @@ namespace DatabaseObjects
 
         protected override void OnModelCreating (ModelBuilder builder)
         {
-            builder.Entity<Property>()
+            /*builder.Entity<Property>()
                 .HasData(
                     new Property {PropertyId=1, IsAvailabe=false,MarketValue = 0, RentValue=100,LandlordId=1,PropertyTypeId=1, LocationId = 1},
                     new Property {PropertyId=2, IsAvailabe=false,MarketValue = 0, RentValue=100,LandlordId=1,PropertyTypeId=1, LocationId = 1},
                     new Property {PropertyId=3, IsAvailabe=false,MarketValue = 0, RentValue=100,LandlordId=1,PropertyTypeId=1, LocationId = 1}
-                ); 
+                ); */
         }
     }
 }
