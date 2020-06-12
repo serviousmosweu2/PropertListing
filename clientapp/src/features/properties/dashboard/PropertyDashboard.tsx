@@ -12,6 +12,9 @@ interface IProps {
   editModeProperty: boolean;
   setEdtModeProperty: (editModeProperty: boolean) => void;
   setSelectedProperty: (property: IProperty | null) => void;
+  createProperty: (property: IProperty)=>void;
+  editProperty: (property: IProperty)=>void;
+  deleteProperty:(id: string)=>void;
 }
 
 export const PropertyDashboard: React.FC<IProps> = ({
@@ -21,11 +24,16 @@ export const PropertyDashboard: React.FC<IProps> = ({
   editModeProperty,
   setEdtModeProperty,
   setSelectedProperty,
+  createProperty,
+  editProperty,
+  deleteProperty
 }) => {
   return (
     <Grid>
       <Grid.Column width={10}>
-        <PropertyList properties={properties} selectProperty={selectProperty} />
+        <PropertyList 
+        properties={properties} selectProperty={selectProperty} 
+        deleteProperty={deleteProperty}/>
       </Grid.Column>
       <Grid.Column width={6}>
         {selectedProperty && !editModeProperty && (
@@ -37,8 +45,11 @@ export const PropertyDashboard: React.FC<IProps> = ({
         )}
         {editModeProperty && (
           <PropertyForm
+          key={selectedProperty && selectedProperty.propertyId || 0} 
             setEdtModeProperty={setEdtModeProperty}
-            property={selectedProperty}
+            property={selectedProperty!}
+            createProperty={createProperty}
+            editProperty={editProperty}
           />
         )}
       </Grid.Column>

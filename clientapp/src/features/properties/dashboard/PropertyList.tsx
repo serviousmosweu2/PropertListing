@@ -5,10 +5,11 @@ import { IProperty } from "../../../app/models/property";
 interface IProps {
   properties: IProperty[];
   selectProperty: (id: string) => void;
+  deleteProperty: (id: string) => void;
 }
 export const PropertyList: React.FC<IProps> = ({
   properties,
-  selectProperty,
+  selectProperty,deleteProperty
 }) => {
   return (
     <Segment clearing>
@@ -31,6 +32,12 @@ export const PropertyList: React.FC<IProps> = ({
                   floated="right"
                   color="blue"
                   content="View"
+                />
+                <Button
+                  onClick={() => deleteProperty(prop.propertyId)}
+                  floated="right"
+                  color="red"
+                  content="Delete"
                 />
               </Item.Extra>
             </Item.Content>
