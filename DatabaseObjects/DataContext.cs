@@ -11,7 +11,7 @@ namespace DatabaseObjects
             
         }
 
-        public DbSet<Property> Properties {get;set;}
+        public DbSet<LandProperty> LandProperties {get;set;}
 
         protected override void OnModelCreating (ModelBuilder builder)
         {

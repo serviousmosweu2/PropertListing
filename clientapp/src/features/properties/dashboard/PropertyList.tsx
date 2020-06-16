@@ -1,40 +1,40 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Item, Button, Segment } from "semantic-ui-react";
-import { IProperty } from "../../../app/models/property";
+import { observer } from "mobx-react-lite";
+import LandPropertyStore from "../../../app/stores/landPropertyStore";
+import { Link } from "react-router-dom";
 
-interface IProps {
-  properties: IProperty[];
-  selectProperty: (id: string) => void;
-  deleteProperty: (id: string) => void;
-}
-export const PropertyList: React.FC<IProps> = ({
-  properties,
-  selectProperty,deleteProperty
-}) => {
+const PropertyList: React.FC = () => {
+
+  const landPropertyStore = useContext(LandPropertyStore);
+  const {landProperties , deleteLandProperty,submitting,target} = landPropertyStore;
+  
   return (
     <Segment clearing>
       <Item.Group divided>
-        {properties.map((prop) => (
-          <Item key={prop.propertyId}>
+        {landProperties.map((landProperty) => (
+          <Item key={landProperty.id}>
             <Item.Content>
-              <Item.Header as="a">R {prop.rentValue}</Item.Header>
+              <Item.Header as="a">{landProperty.title}</Item.Header>
               <Item.Meta>
-                R {prop.rentValue} 2 Bedroom Apartment in Halfway
+                R {landProperty.streatAddress1} 2 Bedroom Apartment in Halfway
               </Item.Meta>
               <Item.Description>
-                <div>IsAvailable {prop.isAvailable}</div>
+                <div>IsAvailable {landProperty.suburb}</div>
                 <div>2 bed</div>
                 <div>1 Shower</div>
               </Item.Description>
               <Item.Extra>
                 <Button
-                  onClick={() => selectProperty(prop.propertyId)}
+                  as={Link} to={`/properties/${landProperty.id}`}
                   floated="right"
                   color="blue"
                   content="View"
                 />
                 <Button
-                  onClick={() => deleteProperty(prop.propertyId)}
+                  name={landProperty.id}
+                  loading={target === landProperty.id && submitting}
+                  onClick={(e) => deleteLandProperty(e,landProperty.id)}
                   floated="right"
                   color="red"
                   content="Delete"
@@ -47,3 +47,5 @@ export const PropertyList: React.FC<IProps> = ({
     </Segment>
   );
 };
+
+export default observer(PropertyList);

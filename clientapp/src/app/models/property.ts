@@ -1,10 +1,8 @@
-export interface IProperty
+export interface ILandProperty
 {
-    propertyId: string;
-    isAvailable: string;
-    marketValue: string;
-    rentValue: string;
-    landlordId: string;
-    propertyTypeId: string;
-    locationId: string;
+    id: string;
+    title: string;
+    streatAddress1: string;
+    suburb: string;
+    city: string;
 }

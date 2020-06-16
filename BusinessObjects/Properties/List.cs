@@ -10,8 +10,8 @@ namespace BusinessObjects.Properties
 {
     public class List
     {
-        public class Query : IRequest<List<Property>> { }
-        public class Handler : IRequestHandler<Query, List<Property>>
+        public class Query : IRequest<List<LandProperty>> { }
+        public class Handler : IRequestHandler<Query, List<LandProperty>>
         {
             private readonly DataContext _context;
             public Handler(DataContext context)
@@ -19,9 +19,9 @@ namespace BusinessObjects.Properties
                 _context = context;
             }
 
-            public async Task<List<Property>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<LandProperty>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var properties =  await _context.Properties.ToListAsync();
+                var properties =  await _context.LandProperties.ToListAsync();
                 return properties;
             }
         }

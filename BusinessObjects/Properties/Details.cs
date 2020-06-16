@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using DatabaseObjects;
@@ -8,12 +9,12 @@ namespace BusinessObjects.Properties
 {
     public class Details
     {
-        public class Query : IRequest<Property>
+        public class Query : IRequest<LandProperty>
         {
-            public int PropertyId { get; set; }
+            public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Property>
+        public class Handler : IRequestHandler<Query, LandProperty>
         {
             private readonly DataContext _context;
             public Handler(DataContext context)
@@ -21,9 +22,9 @@ namespace BusinessObjects.Properties
                 _context = context;
             }
 
-            public async Task<Property> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<LandProperty> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activity =  await _context.Properties.FindAsync(request.PropertyId);
+                var activity =  await _context.LandProperties.FindAsync(request.Id);
                 return activity;
             }
         }

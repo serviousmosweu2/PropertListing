@@ -1,73 +1,34 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useEffect, Fragment, useContext } from "react";
 import { Container } from "semantic-ui-react";
-import axios from "axios";
-import { IProperty } from "../models/property";
 import NavBar from "../../features/nav/NavBar";
-import { PropertyDashboard } from "../../features/properties/dashboard/PropertyDashboard";
+import PropertyDashboard from '../../features/properties/dashboard/PropertyDashboard'
+import LandPropertyStore from "../stores/landPropertyStore";
+import LoadingComponent from "./LoadingComponent";
+import {observer} from 'mobx-react-lite';
+import { Route, withRouter, RouteComponentProps} from "react-router-dom";
+import { homepage } from "../../features/home/homepage";
+import PropertyForm from "../../features/properties/form/PropertyForm";
+import PropertyDetails from "../../features/properties/details/PropertyDetails";
 
-const baseURL = "";
-
-const App = () => {
-  const [properties, setProperties] = useState<IProperty[]>([]);
-  const [selectedProperty, setSelectedProperty] = useState<IProperty | null>(
-    null
-  );
-  const [editModeProperty, setEdtModeProperty]=useState(false);
-
-  const handleSelectPropoerty = (id: string) => {
-    setSelectedProperty(properties.filter((a) => a.propertyId === id)[0]);
-    setEdtModeProperty(false);
-  };
-
-  const  handleOpenCreateForm = ()=>{
-    setSelectedProperty(null);
-    setEdtModeProperty(true);
-  };
-
-  const handleCreateProperty=(property: IProperty)=>{
-    setProperties([...properties,property]);
-    setSelectedProperty(property);
-    setEdtModeProperty(false);
-  };
-
-  const handleEditProperty=(property: IProperty)=>{
-    setProperties([...properties.filter(a=>a.propertyId !== property.propertyId), property]);
-    setSelectedProperty(property);
-    setEdtModeProperty(false);
-  };
-
-  const handleDeleteProprty=(id: string)=>{
-    setProperties([...properties.filter(a => a.propertyId !== id)])
-  };
-
+const App: React.FC<RouteComponentProps> = ({location}) => {
+  const landPropertyStore = useContext(LandPropertyStore);
 
   useEffect(() => {
-    axios
-      .get<IProperty[]>("http://localhost:5000/api/Properties/")
-      .then((response) => {
-        setProperties(response.data);
-      });
-  }, []);
+    landPropertyStore.loadLandProperties();
+  }, [landPropertyStore]);
 
+  if(landPropertyStore.loadingInitial) return <LoadingComponent content='Loading Properties'/>
   return (
     <Fragment>
-      <NavBar openCreateForm={handleOpenCreateForm}/>
+      <NavBar/>
       <Container style={{ marginTop: 60 }}>
-        <PropertyDashboard
-          properties={properties}
-          selectProperty={handleSelectPropoerty}
-          selectedProperty={selectedProperty}
-          editModeProperty={editModeProperty}
-          setEdtModeProperty={setEdtModeProperty}
-          setSelectedProperty={setSelectedProperty}
-          createProperty={handleCreateProperty}
-          editProperty={handleEditProperty}
-          deleteProperty ={handleDeleteProprty}
-
-        />
+        <Route exact path='/' component={homepage}/>
+        <Route exact path='/properties' component={PropertyDashboard}/>
+        <Route path='/properties/:id' component={PropertyDetails}/>
+        <Route key={location.key} path={['/createLandProperty', '/editLandProperty/:id']} component={PropertyForm}/>
       </Container>
     </Fragment>
   );
 };
 
-export default App;
+export default withRouter(observer(App));

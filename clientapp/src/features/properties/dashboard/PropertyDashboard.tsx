@@ -1,58 +1,21 @@
 import React from "react";
-import { Grid, List } from "semantic-ui-react";
-import { IProperty } from "../../../app/models/property";
-import { PropertyList } from "./PropertyList";
-import { PropertyDetails } from "../details/PropertyDetails";
-import { PropertyForm } from "../form/PropertyForm";
+import { Grid } from "semantic-ui-react";
+import { observer } from "mobx-react-lite";
+import PropertyList from "./PropertyList";
 
-interface IProps {
-  properties: IProperty[];
-  selectProperty: (id: string) => void;
-  selectedProperty: IProperty | null;
-  editModeProperty: boolean;
-  setEdtModeProperty: (editModeProperty: boolean) => void;
-  setSelectedProperty: (property: IProperty | null) => void;
-  createProperty: (property: IProperty)=>void;
-  editProperty: (property: IProperty)=>void;
-  deleteProperty:(id: string)=>void;
-}
 
-export const PropertyDashboard: React.FC<IProps> = ({
-  properties,
-  selectProperty,
-  selectedProperty,
-  editModeProperty,
-  setEdtModeProperty,
-  setSelectedProperty,
-  createProperty,
-  editProperty,
-  deleteProperty
-}) => {
+const PropertyDashboard: React.FC = () => {
+
   return (
     <Grid>
       <Grid.Column width={10}>
-        <PropertyList 
-        properties={properties} selectProperty={selectProperty} 
-        deleteProperty={deleteProperty}/>
+        <PropertyList/>
       </Grid.Column>
       <Grid.Column width={6}>
-        {selectedProperty && !editModeProperty && (
-          <PropertyDetails
-            property={selectedProperty}
-            setEdtModeProperty={setEdtModeProperty}
-            setSelectedProperty={setSelectedProperty}
-          />
-        )}
-        {editModeProperty && (
-          <PropertyForm
-          key={selectedProperty && selectedProperty.propertyId || 0} 
-            setEdtModeProperty={setEdtModeProperty}
-            property={selectedProperty!}
-            createProperty={createProperty}
-            editProperty={editProperty}
-          />
-        )}
+       <h1>Filters Later</h1>
       </Grid.Column>
     </Grid>
   );
 };
+
+export default observer(PropertyDashboard);

@@ -8,25 +8,25 @@ namespace DatabaseObjects
     {
         public static void SeedData(DataContext context)
         {
-            if(!context.Properties.Any())
+            if(!context.LandProperties.Any())
             {
-                var properties = new List<Property>
+                var LandProperties = new List<LandProperty>
                 {
-                    new Property{
-                         IsAvailabe = true,MarketValue =1000, RentValue = 10,LandlordId=1,PropertyTypeId=1,LocationId = 1
+                    new LandProperty{
+                         Title = "3 Bedroom",StreatAddress1 ="1000", Suburb = "10",City="1"
                         },
-                    new Property{
-                         IsAvailabe = false,MarketValue =1000, RentValue = 10,LandlordId=1,PropertyTypeId=1,LocationId = 1
+                    new LandProperty{
+                         Title = "3 Bedroom",StreatAddress1 ="1000", Suburb = "10",City="1"
                         },
-                    new Property{
-                         IsAvailabe = true,MarketValue =1000, RentValue = 10,LandlordId=1,PropertyTypeId=1,LocationId = 1
+                    new LandProperty{
+                         Title = "3 Bedroom",StreatAddress1 ="1000", Suburb = "10",City="1"
                         },
-                    new Property{
-                         IsAvailabe = false,MarketValue =1000, RentValue = 10,LandlordId=1,PropertyTypeId=1,LocationId = 1
+                    new LandProperty{
+                         Title = "3 Bedroom",StreatAddress1 ="1000", Suburb = "10",City="1"
                         }
                 };
 
-                context.Properties.AddRange(properties);
+                context.LandProperties.AddRange(LandProperties);
                 context.SaveChanges();
             }
         }

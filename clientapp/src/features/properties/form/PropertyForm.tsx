@@ -1,79 +1,83 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useContext, useEffect } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
-import { IProperty } from "../../../app/models/property";
+import { ILandProperty } from "../../../app/models/property";
 import {v4 as uuid} from "uuid";
+import LandPropertyStore from '../../../app/stores/landPropertyStore';
+import { observer } from "mobx-react-lite";
+import { RouteComponentProps } from "react-router-dom";
 
-interface IProps {
-  setEdtModeProperty: (editMode: boolean) => void;
-  property: IProperty;
-  createProperty: (property: IProperty) => void;
-  editProperty: (property: IProperty) => void;
-  
+interface DetailParams {
+  id: string;
 }
 
-export const PropertyForm: React.FC<IProps> = ({
-  setEdtModeProperty,
-  property: initializeFormState,
-  createProperty,
-  editProperty
-}) => {
-  const initializeForm = () => {
-    if (initializeFormState) {
-      return initializeFormState;
-    } else {
-      return {
-        propertyId: "",
-        isAvailable: "",
-        marketValue: "",
-        rentValue: "",
-        landlordId: "",
-        propertyTypeId: "",
-        locationId: "",
-      };
-    }
-  };
+const PropertyForm: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
 
-  const [property, setProperty] = useState<IProperty>(initializeForm);
+  const landPropertyStore = useContext(LandPropertyStore);
+  const {createLandProperty, editLandProperty, submitting, cancelFormOpen, landProperty: initializeFormState, loadLandProperty, clearLandProperty} = landPropertyStore;
+
+  const [landProperty, setLandProperty] = useState<ILandProperty>({
+      id: '',
+      title: '',
+      streatAddress1: '',
+      suburb: '',
+      city: ''
+  });
+  
+  useEffect(() => {
+    if(match.params.id || landProperty.id.length === 0){
+      loadLandProperty(match.params.id).then(()=> initializeFormState && setLandProperty(initializeFormState))
+    }
+    return () =>{
+      clearLandProperty();
+    }
+  },[clearLandProperty,loadLandProperty,initializeFormState, match.params.id,landProperty.id.length]);
 
   const handleSubmit = () => {
-    if (property.propertyId.length === 0) {
+    if (landProperty.id.length === 0) {
       let newProperty = {
-        ...property,
+        ...landProperty,
+        id: uuid()
       };
-      createProperty(newProperty);
+      createLandProperty(newProperty).then(() => history.push(`/properties/${newProperty.id}`));
     } else {
-      editProperty(property);
+      editLandProperty(landProperty).then(()=> history.push(`/properties/${landProperty.id}`));
     }
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setProperty({ ...property, [name]: value });
+    setLandProperty({ ...landProperty, [name]: value });
   };
   return (
     <Segment clearing>
       <Form onSubmit={handleSubmit}>
         <Form.Input
           onChange={handleInputChange}
-          name="rentValue"
-          placeholder="RentValue"
-          value={property.rentValue}
+          name="title"
+          placeholder="Title"
+          value={landProperty.title}
         />
         <Form.Input
           onChange={handleInputChange}
-          name="isAvailable"
-          placeholder="Available"
-          value={property.isAvailable}
+          name="streatAddress1"
+          placeholder="StreatAddress1"
+          value={landProperty.streatAddress1}
         />
         <Form.Input
           onChange={handleInputChange}
-          name="marketValue"
-          placeholder="MarketValue"
-          value={property.marketValue}
+          name="suburb"
+          placeholder="Suburb"
+          value={landProperty.suburb}
         />
-        <Button floated="right" positive type="submit" content="Save" />
+        <Form.Input
+          onChange={handleInputChange}
+          name="city"
+          placeholder="City"
+          value={landProperty.city}
+        />
+        <Button loading={submitting} floated="right" positive type="submit" content="Save" />
         <Button
-          onClick={() => setEdtModeProperty(false)}
+          onClick={cancelFormOpen}
           floated="right"
           type="button"
           content="Cancel"
@@ -82,3 +86,5 @@ export const PropertyForm: React.FC<IProps> = ({
     </Segment>
   );
 };
+
+export default observer(PropertyForm);

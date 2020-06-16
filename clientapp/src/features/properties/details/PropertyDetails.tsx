@@ -1,22 +1,36 @@
-import React from "react";
-import { Card, Image, Icon, Button } from "semantic-ui-react";
-import { IProperty } from "../../../app/models/property";
+import React, { useContext, useEffect } from "react";
+import { Card, Image, Button } from "semantic-ui-react";
+import LandPropertyStore from "../../../app/stores/landPropertyStore";
+import { observer } from "mobx-react-lite";
+import { RouteComponentProps, Link } from "react-router-dom";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
-interface IProps {
-  property: IProperty;
-  setEdtModeProperty: (editMode: boolean) => void;
-  setSelectedProperty: (property: IProperty | null) => void;
+interface DetailParams {
+  id: string;
 }
-export const PropertyDetails: React.FC<IProps> = ({
-  property,
-  setEdtModeProperty,
-  setSelectedProperty,
+
+const PropertyDetails: React.FC<RouteComponentProps<DetailParams>> = ({
+  match,history
 }) => {
+  const landPropertyStore = useContext(LandPropertyStore);
+  const {
+    landProperty,
+    loadLandProperty,
+    loadingInitial,
+  } = landPropertyStore;
+
+  useEffect(() => {
+    loadLandProperty(match.params.id);
+  }, [loadLandProperty, match.params.id]);
+
+  if (loadingInitial || !landProperty)
+    return <LoadingComponent content="Loading Property" />;
+
   return (
     <Card fluid>
       <Image src="/assets/placeholder.png" wrapped ui={false} />
       <Card.Content>
-        <Card.Header>Rent Value : {property.rentValue}</Card.Header>
+        <Card.Header>Rent Value : {landProperty!.title}</Card.Header>
         <Card.Meta>
           <span className="date">Date Added</span>
         </Card.Meta>
@@ -25,13 +39,13 @@ export const PropertyDetails: React.FC<IProps> = ({
       <Card.Content extra>
         <Button.Group widths={3}>
           <Button
-            onClick={() => setEdtModeProperty(true)}
+            as={Link} to={`/editLandProperty/${landProperty.id}`}
             basic
             color="blue"
             content="Edit"
           />
           <Button
-            onClick={() => setSelectedProperty(null)}
+            onClick={()=> history.push('/properties')}
             basic
             color="grey"
             content="Cancel"
@@ -42,3 +56,5 @@ export const PropertyDetails: React.FC<IProps> = ({
     </Card>
   );
 };
+
+export default observer(PropertyDetails);

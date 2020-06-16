@@ -1,11 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BusinessObjects.Properties;
-using DatabaseObjects;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -14,27 +13,40 @@ namespace api.Controllers
     public class PropertiesController : ControllerBase
     {
         private readonly IMediator _mediator;
-
         public PropertiesController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        //Get
         [HttpGet]
-        public async Task<ActionResult<List<Property>>> List()
+        public async Task<ActionResult<List<LandProperty>>> List()
         {
-           return  await _mediator.Send(new List.Query());
-            
+            return await _mediator.Send(new List.Query());
         }
 
-        [HttpGet("{propertyId}")]
-        public async Task<ActionResult<Property>> Details(int propertyId)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<LandProperty>> Details(Guid id)
         {
-            return await _mediator.Send(
-                new Details.Query{PropertyId = propertyId});
+            return await _mediator.Send(new Details.Query{Id = id});
         }
 
-       
+        [HttpPost]
+        public async Task<ActionResult<Unit>> Create(Create.Command command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Unit>> Edit(Guid id, Edit.Command command)
+        {
+            command.Id = id;
+            return await _mediator.Send(command);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Unit>> Delete(Guid id)
+        {
+            return await _mediator.Send(new Delete.Command{Id = id});
+        }
     }
 }

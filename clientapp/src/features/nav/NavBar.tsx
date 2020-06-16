@@ -1,23 +1,24 @@
 import React from "react";
 import { Menu, Container, Button } from "semantic-ui-react";
+import { observer } from "mobx-react-lite";
+import { NavLink } from "react-router-dom";
 
-interface IProps{
-  openCreateForm: () => void;
-}
-const NavBar: React.FC<IProps> = ({openCreateForm}) => {
+const NavBar: React.FC = () => {
+
+  
   return (
     <Menu fixed="top" inverted>
       <Container>
-        <Menu.Item>
+        <Menu.Item as={NavLink} exact to='/'>
             Property Listing
         </Menu.Item>
-        <Menu.Item name="Properties" />
+        <Menu.Item name="properties" as={NavLink} to='/properties' />
         <Menu.Item>
-            <Button onClick={openCreateForm}  positive content='Add New Property'/>
+            <Button as={NavLink} to='/createLandProperty' positive content='Add New Property'/>
         </Menu.Item>
       </Container>
     </Menu>
   );
 };
 
-export default NavBar;
+export default observer(NavBar);
