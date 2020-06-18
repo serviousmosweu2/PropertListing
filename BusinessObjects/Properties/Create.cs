@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DatabaseObjects;
 using Domain;
+using FluentValidation;
 using MediatR;
 
 namespace BusinessObjects.Properties
@@ -18,6 +19,12 @@ namespace BusinessObjects.Properties
             public string City { get; set; }
         }
 
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+            }
+        }
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
