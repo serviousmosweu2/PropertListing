@@ -1,20 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Item, Button, Segment, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import LandPropertyStore from "../../../app/stores/landPropertyStore";
 import { ILandProperty } from "../../../app/models/property";
 
 export const PropertyListItem: React.FC<{ landProperty: ILandProperty }> = ({
   landProperty,
 }) => {
-  const landPropertyStore = useContext(LandPropertyStore);
-  const {
-    landProperties,
-    deleteLandProperty,
-    submitting,
-    target,
-  } = landPropertyStore;
+
 
   return (
     <Segment.Group>

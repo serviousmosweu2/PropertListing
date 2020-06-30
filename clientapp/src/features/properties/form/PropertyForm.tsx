@@ -13,7 +13,9 @@ interface DetailParams {
 const PropertyForm: React.FC<RouteComponentProps<DetailParams>> = ({match, history}) => {
 
   const landPropertyStore = useContext(LandPropertyStore);
-  const {createLandProperty, editLandProperty, submitting, cancelFormOpen, landProperty: initializeFormState, loadLandProperty, clearLandProperty} = landPropertyStore;
+  const {
+    createLandProperty, editLandProperty, submitting, cancelFormOpen, 
+    landProperty: initializeFormState, loadLandProperty, clearLandProperty} = landPropertyStore;
 
   const [landProperty, setLandProperty] = useState<ILandProperty>({
       id: '',
@@ -27,10 +29,10 @@ const PropertyForm: React.FC<RouteComponentProps<DetailParams>> = ({match, histo
     if(match.params.id || landProperty.id.length === 0){
       loadLandProperty(match.params.id).then(()=> initializeFormState && setLandProperty(initializeFormState))
     }
-    return () =>{
+    return () => {
       clearLandProperty();
     }
-  },[clearLandProperty,loadLandProperty,initializeFormState, match.params.id,landProperty.id.length]);
+  },[clearLandProperty,loadLandProperty,setLandProperty,initializeFormState, match.params.id,landProperty.id.length]);
 
   const handleSubmit = () => {
     if (landProperty.id.length === 0) {

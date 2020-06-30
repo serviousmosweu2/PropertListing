@@ -23,6 +23,10 @@ namespace BusinessObjects.Properties
         {
             public CommandValidator()
             {
+                RuleFor(x =>x.Title).NotEmpty();
+                RuleFor(x =>x.StreatAddress1).NotEmpty();
+                RuleFor(x =>x.Suburb).NotEmpty();
+                RuleFor(x =>x.City).NotEmpty();
             }
         }
         public class Handler : IRequestHandler<Command>

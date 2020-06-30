@@ -19,20 +19,15 @@ namespace DatabaseObjects.Migrations
             modelBuilder.Entity("Domain.LandProperty", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("City")
-                        .HasColumnType("TEXT");
+                    b.Property<string>("City");
 
-                    b.Property<string>("StreatAddress1")
-                        .HasColumnType("TEXT");
+                    b.Property<string>("StreatAddress1");
 
-                    b.Property<string>("Suburb")
-                        .HasColumnType("TEXT");
+                    b.Property<string>("Suburb");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 

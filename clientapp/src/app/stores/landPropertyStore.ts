@@ -8,7 +8,7 @@ configure({enforceActions:"always"});
 class LandPropertyStore{
     @observable landPropertyRegistry = new Map(); // To be used later
     @observable landProperties:ILandProperty[] =[]
-    @observable landProperty: ILandProperty | undefined;
+    @observable landProperty: ILandProperty | undefined = undefined;
     @observable loadingInitial = false;
     @observable submitting = false;
     @observable editModeLandProperty = false;
@@ -37,6 +37,7 @@ class LandPropertyStore{
     };
 
     @action loadLandProperty = async(id: string) =>{
+        debugger;
         let landProperty = this.getLandPropery(id);
 
         if(landProperty){
@@ -59,10 +60,11 @@ class LandPropertyStore{
     };
 
     @action clearLandProperty = () =>{
+        debugger;
         this.landProperty = undefined;
     }
     getLandPropery = (id: string) =>{
-        //return this.landPropertyRegistry.get(id);
+        //return this.landPropertyRegistry.get(id);d
         return this.landProperty = this.landProperties.find(a => a.id === id);
     };
 
@@ -146,8 +148,8 @@ class LandPropertyStore{
 
     @action selectLandProperty = (id: string)=>{
         //debugger;
-        //this.landProperty = this.landProperties.find(a => a.id === id);
-        this.landProperty = this.landPropertyRegistry.get(id);
+        this.landProperty = this.landProperties.find(a => a.id === id);
+        //this.landProperty = this.landPropertyRegistry.get(id);
         this.editModeLandProperty = false;
     };
 }

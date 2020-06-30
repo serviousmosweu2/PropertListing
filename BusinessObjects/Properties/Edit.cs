@@ -1,7 +1,10 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using BusinessObjects.Errors;
 using DatabaseObjects;
+using FluentValidation;
 using MediatR;
 
 namespace BusinessObjects.Properties
@@ -17,7 +20,16 @@ namespace BusinessObjects.Properties
 
             public string City { get; set; }
         }
-
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Title).NotEmpty();
+                RuleFor(x => x.StreatAddress1).NotEmpty();
+                RuleFor(x => x.Suburb).NotEmpty();
+                RuleFor(x => x.City).NotEmpty();
+            }
+        }
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
@@ -30,11 +42,11 @@ namespace BusinessObjects.Properties
             {
                 var property = await _context.LandProperties.FindAsync(request.Id);
 
-                if (property == null)
-                    throw new Exception("Could not find property");
+                 if (property == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { property = "Not Found" });
 
-                property.Title = request.Title ?? property.Title;            
-                property.StreatAddress1 = request.StreatAddress1 ?? property.StreatAddress1;            
+                property.Title = request.Title ?? property.Title;
+                property.StreatAddress1 = request.StreatAddress1 ?? property.StreatAddress1;
                 property.Suburb = request.Suburb ?? property.Suburb;
                 property.City = request.City ?? property.City;
 

@@ -21,10 +21,14 @@ const PropertyDetails: React.FC<RouteComponentProps<DetailParams>> = ({
 
   useEffect(() => {
     loadLandProperty(match.params.id);
-  }, [loadLandProperty, match.params.id]);
+  }, [loadLandProperty, match.params.id, history]);
 
-  if (loadingInitial || !landProperty)
+  if (loadingInitial)
     return <LoadingComponent content="Loading Property" />;
+
+  if(!landProperty){
+    return <h1>Property Not Found</h1>
+  }
 
   return (
     <Card fluid>

@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using BusinessObjects.Errors;
 using DatabaseObjects;
 using MediatR;
 
@@ -26,9 +28,9 @@ namespace BusinessObjects.Properties
                 var property = await _context.LandProperties.FindAsync(request.Id);
 
                 if (property == null)
-                    throw new Exception("Could not find property");
+                    throw new RestException(HttpStatusCode.NotFound, new { property = "Not Found" });
 
-                _context.Remove(property);              
+                _context.Remove(property);
 
                 var success = await _context.SaveChangesAsync() > 0;
 

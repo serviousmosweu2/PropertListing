@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using BusinessObjects.Errors;
 using DatabaseObjects;
 using Domain;
 using MediatR;
@@ -24,8 +26,10 @@ namespace BusinessObjects.Properties
 
             public async Task<LandProperty> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activity =  await _context.LandProperties.FindAsync(request.Id);
-                return activity;
+                var property =  await _context.LandProperties.FindAsync(request.Id);
+                 if (property == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { property = "Not Found" });
+                return property;
             }
         }
     }

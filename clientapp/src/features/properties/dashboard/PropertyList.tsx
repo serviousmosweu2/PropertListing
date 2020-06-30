@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Item, Segment } from "semantic-ui-react";
+import { Item } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import LandPropertyStore from "../../../app/stores/landPropertyStore";
 import { PropertyListItem } from "./PropertyListItem";
@@ -7,7 +7,7 @@ import { PropertyListItem } from "./PropertyListItem";
 const PropertyList: React.FC = () => {
 
   const landPropertyStore = useContext(LandPropertyStore);
-  const {landProperties ,submitting} = landPropertyStore;
+  const {landProperties } = landPropertyStore;
   
   return (
       <Item.Group divided>
