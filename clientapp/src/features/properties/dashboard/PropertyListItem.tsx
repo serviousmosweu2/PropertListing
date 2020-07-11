@@ -16,6 +16,7 @@ export const PropertyListItem: React.FC<{ landProperty: ILandProperty }> = ({
           <Item>
             <Item.Content>
               <Item.Header as="a">{landProperty.title}</Item.Header>
+              <p>{landProperty.title}</p>
             </Item.Content>
           </Item>
         </Item.Group>

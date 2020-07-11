@@ -5,6 +5,7 @@ using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,8 @@ namespace api
         {
             services.AddDbContext<DataContext>(opt =>{
 
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                //opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
 
             });
             //services.AddControllers();
@@ -38,8 +40,9 @@ namespace api
             //This is defined just for one. The rest will work 
             //because they will be using the same Library
             services.AddMediatR(typeof(List.Handler).Assembly);
-            services.AddMvc(option => option.EnableEndpointRouting = false).AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>());
-            //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);  
+            services.AddMvc(option => option.EnableEndpointRouting = false)
+                .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>());
+                //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);  
             
         }
 
@@ -55,20 +58,20 @@ namespace api
             {
                 app.UseHsts();
             }
-            //app.UseMvc();
+            app.UseMvc();
             //app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseCors("CorsPolicy");
             app.UseRouting();
-           // app.UseMvc(routes =>
-           // {
-            //   routes.MapSpaFallbackRoute(
-            //       name:"spa-fallback",
-            //       defaults: new {
-             //           controller="Fallback", Action="index"
-            //       }
-            //    );
+            //app.UseMvc(routes =>
+            //{
+              // routes.MapSpaFallbackRoute(
+              //     name:"spa-fallback",
+               //    defaults: new {
+               //         controller="Fallback", Action="index"
+               //    }
+               // );
             //});
            //app.UseAuthorization();
 

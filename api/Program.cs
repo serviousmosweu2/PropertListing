@@ -31,7 +31,7 @@ namespace api
                 catch(Exception ex)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "Servious : An error occured duting migration");
+                    logger.LogError(ex, "Servious : An error occured during migration");
                 }
             }
 

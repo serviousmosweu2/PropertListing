@@ -9,27 +9,32 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatabaseObjects.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200613011957_InitialCreateUpdate")]
-    partial class InitialCreateUpdate
+    [Migration("20200701122542_InitialCreateNew")]
+    partial class InitialCreateNew
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.4");
+                .HasAnnotation("ProductVersion", "3.1.5");
 
             modelBuilder.Entity("Domain.LandProperty", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("City");
+                    b.Property<string>("City")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("StreatAddress1");
+                    b.Property<string>("StreatAddress1")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Suburb");
+                    b.Property<string>("Suburb")
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
